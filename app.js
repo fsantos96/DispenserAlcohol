@@ -17,7 +17,7 @@ router.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html')
 });
 
-//require('./routes/client')(router);
+require('./routes/employee')(router);
 
 router.listen(PORT, function() {
   console.log(`Server running on port ${PORT}`);
