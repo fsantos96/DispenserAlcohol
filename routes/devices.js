@@ -17,8 +17,8 @@ module.exports = function(router) {
   });
 
   router.get('/device', (req, res) => {
-    deviceService.getDeviceData(req.deviceId).then(() => {
-        res.status(200).send();
+    deviceService.getDeviceData(req.deviceId).then((data) => {
+        res.status(200).send(data);
     }).catch((error) => {
       res.status(404).send('Not found');
     })

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express();
 const bodyParser = require('body-parser');
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3500; 
 
 // MySql
 // const connection = mysql.createConnection({
@@ -18,6 +18,8 @@ router.get('/', function(req, res) {
 });
 
 require('./routes/employee')(router);
+require('./routes/devices')(router);
+
 
 router.listen(PORT, function() {
   console.log(`Server running on port ${PORT}`);
