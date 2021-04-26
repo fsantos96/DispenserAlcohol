@@ -24,5 +24,13 @@ module.exports = function(router) {
     })
   });
 
+  router.post('/device/{deviceId}/alert/{alarmaActiva}', (req, res) => {
+    deviceService.getDeviceAlert(req.deviceId, req.alarmaActiva).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+      res.status(404).send('Not found');
+    })
+  });
+
 
 }

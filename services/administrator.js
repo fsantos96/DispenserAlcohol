@@ -10,7 +10,7 @@ const managerList = [],
 function getListManagers(managerId) {
     return new Promise((resolve, reject) => {
         resolve({
-            manager: managerId ? managerList.find(m => m.id === managerId) : managerList;
+            manager: managerId ? managerList.find(m => m.id === managerId) : managerList
         });
     })
 }
