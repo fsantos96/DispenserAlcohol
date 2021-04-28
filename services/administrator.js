@@ -1,4 +1,4 @@
-const managerList = [],
+const managerList = [];
 //empleado
 // {
 //     id

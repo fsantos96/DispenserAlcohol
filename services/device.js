@@ -1,9 +1,9 @@
 const moment = require('moment');
 const devicesList = [],
 minLevel = null,
-timeAck = 13,
-timeCharge= 12,
 dateFormat = "YYYY/MM/DD HH:mm";
+var timeAck = 13,
+timeCharge= 12;
 
 //dispositivo
 // {
@@ -13,7 +13,7 @@ dateFormat = "YYYY/MM/DD HH:mm";
 //     employeeACK
 // }
 
-function getTimeConfiguration(device) {
+function getTimeConfiguration() {
     return {
         timeAck: timeAck,
         timeCharge: timeCharge
@@ -76,13 +76,23 @@ function getDeviceData(deviceId) {
         resolve(device || null)
     })
 }
+
+function setAlarmsTimes(data) {
+    return new Promise((resolve, reject) => {
+        timeAck = data.timeAck;
+        timeCharge = data.timeCharge;
+
+        resolve(getTimeConfiguration);
+    })
+}
 const service = {
     deviceRegister: deviceRegister,
     setLastUpdateDate: setLastUpdateDate,
     validateTime: validateTime,
     getTimeConfiguration: getTimeConfiguration,
     getDeviceData: getDeviceData,
-    setAckData: setAckData
+    setAckData: setAckData,
+    setAlarmsTimes: setAlarmsTimes
 }
 
 module.exports = service;

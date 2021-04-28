@@ -1,6 +1,5 @@
 const deviceService = require('./device');
 const adminService = require('./administrator');
-const deviceService = require('./device');
 const employeeList = [],
 devicesList = [];
 //empleado

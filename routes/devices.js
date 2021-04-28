@@ -8,6 +8,14 @@ module.exports = function(router) {
     })
   });
 
+  router.post('/device/setAlarms', (req, res) => {
+    deviceService.setAlarmsTimes(req.body).then(() => {
+        res.status(200).send();
+    }).catch((error) => {
+      res.status(404).send('Not found');
+    })
+  });
+
   router.post('/device/lastUpdateDate/{deviceId}', (req, res) => {
     deviceService.setLastUpdateDate(req.deviceId).then(() => {
         res.status(200).send();
@@ -22,6 +30,12 @@ module.exports = function(router) {
     }).catch((error) => {
       res.status(404).send('Not found');
     })
+  });
+
+  router.get('/device/times', (req, res) => {
+
+    res.status(200).send(deviceService.getTimeConfiguration());
+   
   });
 
   router.post('/device/{deviceId}/alert/{alarmaActiva}', (req, res) => {
