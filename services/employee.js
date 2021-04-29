@@ -30,6 +30,14 @@ function getListEmployee(employeeId) {
     })
 }
 
+function getAllListEmployee(employeeId) {
+    return new Promise((resolve, reject) => {
+        resolve({
+            employees: employeeList
+        });
+    })
+}
+
 function getDeviceAlert(deviceId, alarmaActiva) {
     if(!alarmaActiva) {
         deviceService.setLastUpdateDate(deviceId);
@@ -102,7 +110,8 @@ const service = {
     employeeStartRegister: employeeStartRegister,
     employeeAckRegister: employeeAckRegister,
     employeeDonetRegister: employeeDonetRegister,
-    getDeviceAlert: getDeviceAlert
+    getDeviceAlert: getDeviceAlert,
+    getAllListEmployee: getAllListEmployee
 }
 
 module.exports = service;

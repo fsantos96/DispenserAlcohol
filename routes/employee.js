@@ -8,6 +8,14 @@ module.exports = function(router) {
     })
   });
 
+  router.get('/employee/list/all', (req, res) => {
+    employeeService.getAllListEmployee().then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+      res.status(404).send('Not found');
+    })
+  });
+
   router.post('/employee/{employeeId}/end', (req, res) => {
     employeeService.employeeEndRegister(req.employeeId).then(() => res.status(200).send())
     .catch((error) => {

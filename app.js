@@ -21,6 +21,7 @@ router.get('/', function(req, res) {
 
 require('./routes/employee')(router);
 require('./routes/devices')(router);
+require('./routes/administrator')(router);
 
 
 router.listen(PORT, function() {
