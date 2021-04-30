@@ -15,6 +15,14 @@ module.exports = function(router) {
       res.status(404).send('Not found');
     })
   });
+  
+  router.get('/device/list', (req, res) => {
+    deviceService.getAllDevice().then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+      res.status(404).send('Not found');
+    })
+  });
 
   router.post('/device/lastUpdateDate/{deviceId}', (req, res) => {
     deviceService.setLastUpdateDate(req.deviceId).then(() => {

@@ -22,8 +22,8 @@ function getTimeConfiguration() {
 
 function deviceRegister(deviceId) {
     return new Promise((resolve, reject) => {
-        const indexDevice = devicesList.find(d => d.id === deviceId);
-        if(indexDevice === -1) {
+        const indexDevice = devicesList.find(d => d.id == deviceId);
+        if(!indexDevice || indexDevice === -1) {
             devicesList.push({
                 id: deviceId,
                 lastUpdateDate: moment().format(dateFormat),
@@ -37,7 +37,7 @@ function deviceRegister(deviceId) {
 }
 
 function setAckData(deviceId, data) {
-    var index =devicesList.findIndex(d => d.id === deviceId);
+    var index =devicesList.findIndex(d => d.id == deviceId);
     if(index != -1) {
         devicesList[index].hasACK = data.hasACK;
         devicesList[index].employeeACK = data.employeeACK;
@@ -85,6 +85,12 @@ function setAlarmsTimes(data) {
         resolve(getTimeConfiguration);
     })
 }
+
+function getAllDevice(data) {
+    return new Promise((resolve, reject) => {
+        resolve(devicesList);
+    })
+}
 const service = {
     deviceRegister: deviceRegister,
     setLastUpdateDate: setLastUpdateDate,
@@ -92,7 +98,8 @@ const service = {
     getTimeConfiguration: getTimeConfiguration,
     getDeviceData: getDeviceData,
     setAckData: setAckData,
-    setAlarmsTimes: setAlarmsTimes
+    setAlarmsTimes: setAlarmsTimes,
+    getAllDevice: getAllDevice
 }
 
 module.exports = service;

@@ -6,7 +6,7 @@ devicesList = [];
 // {
 //     id
 //     name
-//     isEnabled
+//     enabled
 // }
 
 //dispositivo
@@ -21,11 +21,11 @@ function getListEmployee(employeeId) {
     return new Promise((resolve, reject) => {
         var employeeListFiltered = [];
         if(employeeId) {
-            employeeListFiltered = employeeList.filter(e => e.id !== employeeId && e.isEnabled);
+            employeeListFiltered = employeeList.find(e => e.id !== employeeId);
         }
     
         resolve({
-            employees: employeeId ? employeeListFiltered : employeeList.filter(e => e.isEnabled)
+            employees: employeeId ? employeeListFiltered : employeeList.filter(e => e.enabled)
         });
     })
 }
@@ -54,9 +54,13 @@ function getDeviceAlert(deviceId, alarmaActiva) {
 
 function employeeEndRegister(employeeId) {
     return new Promise((resolve, reject) => {
-        const indexEmployee = employeeList.findIndex(e => e.id === employeeId);
+        if(!employeeId) {
+            reject();
+        }
+
+        const indexEmployee = employeeList.findIndex(e => e.id == employeeId);
         if(indexEmployee !== -1) {
-            employeeList[indexEmployee].isEnabled = false;
+            employeeList[indexEmployee].enabled = false;
         }
 
         resolve();
@@ -65,9 +69,9 @@ function employeeEndRegister(employeeId) {
 
 function employeeStartRegister(employeeId, deviceId, employee) {
     return new Promise((resolve, reject) => {
-        const indexEmployee = employeeList.findIndex(e => e.id === employeeId);
+        const indexEmployee = employeeList.findIndex(e => e.id == employeeId);
         if(indexEmployee !== -1) {
-            employeeList[indexEmployee].isEnabled = true;
+            employeeList[indexEmployee].enabled = true;
         } else {
             employeeList.push(employee);
         }
@@ -80,7 +84,7 @@ function employeeStartRegister(employeeId, deviceId, employee) {
 
 function employeeAckRegister(employeeId, deviceId) {
     return new Promise((resolve, reject) => {
-        const indexEmployee = employeeList.findIndex(e => e.id === employeeId);
+        const indexEmployee = employeeList.findIndex(e => e.id == employeeId);
 
         if(indexEmployee !== -1) {
             deviceService.setAckData(deviceId , {
