@@ -1,9 +1,9 @@
 const moment = require('moment');
 const devicesList = [],
-minLevel = null,
-dateFormat = "YYYY/MM/DD HH:mm";
+    minLevel = null,
+    dateFormat = "YYYY/MM/DD HH:mm";
 var timeAck = 13,
-timeCharge= 12;
+    timeCharge = 12;
 
 //dispositivo
 // {
@@ -15,15 +15,15 @@ timeCharge= 12;
 
 function getTimeConfiguration() {
     return {
-        timeAck: timeAck,
-        timeCharge: timeCharge
+        timeAck: timeAck * 60000,
+        timeCharge: timeCharge * 60000
     }
 }
 
 function deviceRegister(deviceId) {
     return new Promise((resolve, reject) => {
         const indexDevice = devicesList.find(d => d.id == deviceId);
-        if(!indexDevice || indexDevice === -1) {
+        if (!indexDevice || indexDevice === -1) {
             devicesList.push({
                 id: deviceId,
                 lastUpdateDate: moment().format(dateFormat),
@@ -37,29 +37,30 @@ function deviceRegister(deviceId) {
 }
 
 function setAckData(deviceId, data) {
-    var index =devicesList.findIndex(d => d.id == deviceId);
-    if(index != -1) {
+    var index = devicesList.findIndex(d => d.id == deviceId);
+    if (index != -1) {
         devicesList[index].hasACK = data.hasACK;
         devicesList[index].employeeACK = data.employeeACK;
     }
 }
 
-function setLastUpdateDate(deviceId){
+function setLastUpdateDate(deviceId) {
     return new Promise((resolve, reject) => {
-        const indexDevice = devicesList.find(d => d.id === device.id);
-        if(indexDevice !== -1) {
+        const indexDevice = devicesList.find(d => d.id === deviceId.id);
+        if (indexDevice && indexDevice !== -1) {
             devicesList[indexDevice].lastUpdateDate = moment().format(dateFormat);
         }
 
         resolve();
     })
 }
-function validateTime(deviceId, typeTime) {
 
-    const indexDevice = devicesList.find(d => d.id === deviceId);
-    const propertyName = typeTime === "ack" ? "isAckTimingExpired" : "isChargeTimingExpired";
+function validateTime(deviceId, typeTime) {
+    const indexDevice = devicesList.findIndex(d => d.id == deviceId);
     var isExpired = false;
-    if (indexDevice !== -1) {
+    console.log(devicesList)
+    console.log(indexDevice)
+    if (indexDevice != -1) {
         const momentDate = moment(devicesList[indexDevice].lastUpdateDate, dateFormat);
         const momentNoW = moment();
         const momentDifference = momentNoW.valueOf() - momentDate.valueOf();
@@ -69,12 +70,19 @@ function validateTime(deviceId, typeTime) {
     return isExpired;
 }
 
-function getDeviceData(deviceId) {
+function getDeviceDataPromise(deviceId) {
     return new Promise((resolve, reject) => {
         var device = devicesList.find(d => d.id === deviceId);
-        
+
         resolve(device || null)
     })
+}
+
+function getDeviceData(deviceId) {
+
+    var device = devicesList.find(d => d.id === deviceId);
+
+    return device || null;
 }
 
 function setAlarmsTimes(data) {
@@ -97,6 +105,7 @@ const service = {
     validateTime: validateTime,
     getTimeConfiguration: getTimeConfiguration,
     getDeviceData: getDeviceData,
+    getDeviceDataPromise: getDeviceDataPromise,
     setAckData: setAckData,
     setAlarmsTimes: setAlarmsTimes,
     getAllDevice: getAllDevice

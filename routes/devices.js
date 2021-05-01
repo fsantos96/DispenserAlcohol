@@ -33,7 +33,7 @@ module.exports = function(router) {
   });
 
   router.get('/device', (req, res) => {
-    deviceService.getDeviceData(req.deviceId).then((data) => {
+    deviceService.getDeviceDataPromise(req.deviceId).then((data) => {
         res.status(200).send(data);
     }).catch((error) => {
       res.status(404).send('Not found');
@@ -45,14 +45,5 @@ module.exports = function(router) {
     res.status(200).send(deviceService.getTimeConfiguration());
    
   });
-
-  router.post('/device/{deviceId}/alert/{alarmaActiva}', (req, res) => {
-    deviceService.getDeviceAlert(req.deviceId, req.alarmaActiva).then((data) => {
-        res.status(200).send(data);
-    }).catch((error) => {
-      res.status(404).send('Not found');
-    })
-  });
-
 
 }

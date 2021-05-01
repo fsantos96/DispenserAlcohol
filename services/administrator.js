@@ -8,9 +8,13 @@ const managerList = [];
 
 
 function getListManagers(managerId) {
+    return managerId ? managerList.find(m => m.id == managerId) : managerList;
+}
+
+function getListManagersPromise(managerId) {
     return new Promise((resolve, reject) => {
         resolve({
-            manager: managerId ? managerList.find(m => m.id == managerId) : managerList
+            manager: getListManagers(managerId)
         });
     })
 }
@@ -36,9 +40,9 @@ function addOrUpdateManager(managerData) {
 
 function deleteManager(managerId) {
     return new Promise((resolve, reject) => {
-        var managerIndex = managerList.find(m => m.id === managerId);
+        var managerIndex = managerList.findIndex(m => m.id === managerId);
         if(managerIndex !== -1) {
-            managerList.splice(managerList, 1);
+            managerList.splice(managerIndex, 1);
         }
 
         resolve({ manager: managerList});
@@ -48,7 +52,8 @@ function deleteManager(managerId) {
 const service = {
     getListManagers: getListManagers,
     addOrUpdateManager: addOrUpdateManager,
-    deleteManager: deleteManager
+    deleteManager: deleteManager,
+    getListManagersPromise: getListManagersPromise
 }
 
 module.exports = service;

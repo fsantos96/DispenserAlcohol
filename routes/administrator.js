@@ -1,7 +1,7 @@
 const managerService = require('../services/administrator');
 module.exports = function(router) {
   router.get('/manager', (req, res) => {
-    managerService.getListManagers(req.query.id).then((data) => {
+    managerService.getListManagersPromise(req.query.id).then((data) => {
         res.status(200).send(data);
     }).catch((error) => {
       res.status(404).send('Not found');

@@ -39,17 +39,26 @@ function getAllListEmployee(employeeId) {
 }
 
 function getDeviceAlert(deviceId, alarmaActiva) {
-    if(!alarmaActiva) {
-        deviceService.setLastUpdateDate(deviceId);
-        resolve({destinatarios: employeeList, alarma: 1 })
-    } else {
-        var device = deviceService.getDeviceData(deviceId);
-        var managers = adminService.getListManagers();
-        var typeTime = !device.hasACK ? "ack" : "charge";
-        if(validateTime(deviceId, typeTime)) {
-            resolve({destinatarios: managers, alarma: device.hasACK ? 3 : 2, employeeACK: device.employeeACK  })
+    return new Promise((resolve, reject) => {
+        if(alarmaActiva == 0) {
+            deviceService.setLastUpdateDate(deviceId);
+            resolve({amountManagers: employeeList.length, managers: employeeList, alert: 1 })
+        } else {
+            var device = deviceService.getDeviceData(deviceId);
+            var managers = adminService.getListManagers();
+            var typeTime = !device.hasACK ? "ack" : "charge";
+
+            if(deviceService.validateTime(deviceId, typeTime)) {
+
+                const response = {amountManagers: managers.length, managers: managers, alert: device.hasACK ? 3 : 2, employeeACK: device.employeeACK  };
+                console.log(response)
+                resolve(response)
+                return;
+            }
+
+            resolve({amountManagers: 0, alert: 0});
         }
-    }
+    })
 }
 
 function employeeEndRegister(employeeId) {
@@ -85,26 +94,28 @@ function employeeStartRegister(employeeId, deviceId, employee) {
 function employeeAckRegister(employeeId, deviceId) {
     return new Promise((resolve, reject) => {
         const indexEmployee = employeeList.findIndex(e => e.id == employeeId);
-
         if(indexEmployee !== -1) {
             deviceService.setAckData(deviceId , {
                 hasACK: true,
                 employeeACK: employeeList[indexEmployee].name
             })
         }
-
-        resolve({employees: employeeList.filter(e => e.id != employeeId)});
+        
+        const employees = employeeList.filter(e => e.id != employeeId && e.enabled);
+        resolve({amountEmployee: employees.length , employees: employees});
     })
 }
 
-function employeeDonetRegister(deviceId) {
+function employeeDoneRegister(deviceId, employeeId) {
     return new Promise((resolve, reject) => {
         deviceService.setAckData(deviceId , {
             hasACK: false,
             employeeACK: null
         })
 
-        resolve();
+        const employees = employeeList.filter(e => e.id != employeeId && e.enabled);
+
+        resolve({amountEmployee: employees.length , employees: employees});
     })
 }
 
@@ -113,7 +124,7 @@ const service = {
     employeeEndRegister: employeeEndRegister,
     employeeStartRegister: employeeStartRegister,
     employeeAckRegister: employeeAckRegister,
-    employeeDonetRegister: employeeDonetRegister,
+    employeeDoneRegister: employeeDoneRegister,
     getDeviceAlert: getDeviceAlert,
     getAllListEmployee: getAllListEmployee
 }
